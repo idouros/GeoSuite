@@ -1,10 +1,14 @@
 // LandscapeGenerator.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <Mesh.h>
+
 #include <iostream>
 
 int main()
 {
+    auto a = MeshCode();
+
     std::cout << "Hello World!\n";
 }
 

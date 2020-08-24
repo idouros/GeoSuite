@@ -9,27 +9,37 @@
 #include <ZoneTools.h>
 
 using namespace cv;
-using namespace std;
 
 int main(int argc, char** argv)
 {
 
     if (argc != 2)
     {
-        cout << " Usage: " << argv[0] << " ImageToLoadAndDisplay" << endl;
+        std::cout << " Usage: " << argv[0] << " ImageToLoadAndDisplay" << std::endl;
         return -1;
     }
     Mat image;
     image = imread(argv[1], IMREAD_COLOR); // Read the file
     if (image.empty()) // Check for invalid input
     {
-        cout << "Could not open or find the image" << std::endl;
+        std::cout << "Could not open or find the image" << std::endl;
         return -1;
     }
+    
+    // TODO: User parameters
+    auto width = 20;
+    ZoneInfo zone_info = {
+        (Vec3f)image.at<Vec3b>(1, 300),
+        (Vec3f)image.at<Vec3b>(1, 1),
+        (Vec3f)image.at<Vec3b>(1, 600)
+    };
+
+    auto image_with_zones = CalcZones(image, width, zone_info);
+    
     namedWindow("Display window", WINDOW_AUTOSIZE); // Create a window for display.
-    imshow("Display window", image); // Show our image inside it.
+    imshow("Display window", image_with_zones); // Show our image inside it.
     waitKey(0); // Wait for a keystroke in the window
 
-    return zone();
+    return 0;
 }
 

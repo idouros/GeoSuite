@@ -27,11 +27,11 @@ int main(int argc, char** argv)
     }
     
     // TODO: User parameters
-    auto width = 20;
+    double width = 25.0;
     ZoneInfo zone_info = {
-        (Vec3f)image.at<Vec3b>(1, 300),
-        (Vec3f)image.at<Vec3b>(1, 1),
-        (Vec3f)image.at<Vec3b>(1, 600)
+        (Vec3d)image.at<Vec3b>(1, 65),
+        (Vec3d)image.at<Vec3b>(1, 1),
+        (Vec3d)image.at<Vec3b>(1, 128)
     };
 
     auto image_with_zones = CalcZones(image, width, zone_info);

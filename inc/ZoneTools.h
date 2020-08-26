@@ -87,11 +87,17 @@ size_t FindZone(const cv::Mat& m, const int& row, const int& col, const double& 
 	int nearest_land_row = 0;
 	int nearest_land_col = 0;
 
-	for (auto r = 0; r < rows; r++)
+	int row_start = std::max<int>(row - (int)width, 0);
+	int row_end	= std::min<int>(row + (int)width, rows-1);
+
+	int col_start = std::max<int>(col - (int)width, 0);
+	int col_end = std::min<int>(col + (int)width, cols-1);
+
+	for (auto r = row_start; r <= row_end; r++)
 	{
-		for (auto c = 0; c < cols; c++)
+		for (auto c = col_start; c <= col_end; c++)
 		{
-			if (IsLand(m.at<Vec3d>(r, c), zone_info, 10))
+			if (IsLand(m.at<Vec3d>(r, c), zone_info, 20))
 			{
 				auto d = EucDist(row, col, r, c);
 				if (d < nearest_land_distance)

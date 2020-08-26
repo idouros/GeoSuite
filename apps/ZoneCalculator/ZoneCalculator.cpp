@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     }
     
     // TODO: User parameters
-    double width = 50.0;
+    double width = 25.0;
     ZoneInfo zone_info = {
         (Vec3d)image.at<Vec3b>(1, 300),
         (Vec3d)image.at<Vec3b>(1, 1),

@@ -80,8 +80,8 @@ size_t FindZoneIdFromColour(const Vec3d& colour, const ZoneInfo& zone_info)
 
 size_t FindZone(const cv::Mat& m, const int& row, const int& col, const double& width, const ZoneInfo& zone_info)
 {
-	size_t rows = m.rows;
-	size_t cols = m.cols;
+	int rows = m.rows;
+	int cols = m.cols;
 
 	double nearest_land_distance = std::numeric_limits<double>::max();
 	int nearest_land_row = 0;

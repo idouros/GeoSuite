@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LandscapeGenerator", "apps\LandscapeGenerator\LandscapeGenerator.vcxproj", "{AAAFCF08-0416-41C9-B4D7-39896CEDE4F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B0C3A3A-A0E4-45EA-B83E-E3B3C6A67E18} = {1B0C3A3A-A0E4-45EA-B83E-E3B3C6A67E18}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZoneCalculator", "apps\ZoneCalculator\ZoneCalculator.vcxproj", "{F49AB1F2-6394-4E9A-8E17-35748A70C2A4}"
 EndProject

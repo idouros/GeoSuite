@@ -3,23 +3,22 @@
 
 #include <Mesh.h>
 
-#include <iostream>
-
 int main()
 {
+	LandscapeParams p;
 
-	ofstream outfile;
-	outfile.open("W:\\Data\\landscape_01.obj");
+	// TODO: read the params from config file
+	p.scale = 10;
+	std::string outFileName = "W:\\Data\\landscape_01.obj";
+	
+	// Create it
+	auto gm = GeoMesh::CreateGeoMesh(p);
 
-	GridMesh gm = { 
-		{ 0, 0, 0 ,0 }, 
-		{ 0, 10, 0, 0 },
-		{ 0, 0, 0 ,0 },
-		{ 0, 0, 0 ,0 }
-		};
-
-	SaveAsObjFile(gm, 10, outfile);
-	outfile.close();
+	// Save
+	std::ofstream outFile;
+	outFile.open(outFileName);
+	gm->SaveAsObjFile(outFile);
+	outFile.close();
 
 }
 

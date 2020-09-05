@@ -8,11 +8,12 @@ int main()
 	LandscapeParams p;
 
 	// TODO: read the params from config file
-	p.grid_scale = 10.0;
-	p.grid_rows = 500;
-	p.grid_cols = 1000;
-	p.min_altitude = 1.0;
-	p.max_altitude = 2000.0;
+	p.grid_scale = 75.0;
+	p.grid_rows = 300;
+	p.grid_cols = 600;
+	p.min_altitude = 0.0;
+	p.max_altitude = 2918.0;
+	p.variance = 350.0;
 	std::string outFileName = "W:\\Data\\landscape_01.obj";
 	
 	// Create it
@@ -23,6 +24,5 @@ int main()
 	outFile.open(outFileName);
 	gm->SaveAsObjFile(outFile);
 	outFile.close();
-
 }
 

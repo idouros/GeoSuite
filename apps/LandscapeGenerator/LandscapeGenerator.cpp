@@ -3,23 +3,29 @@
 
 #include <Mesh.h>
 
-#include <iostream>
-
 int main()
 {
+	LandscapeParams p;
 
-	ofstream outfile;
-	outfile.open("W:\\Data\\landscape_01.obj");
+	// TODO: read the params from config file
+	p.grid_scale = 100.0;
+	p.grid_rows = 500;
+	p.grid_cols = 500;
+	p.min_altitude = -1000.0;
+	p.max_altitude = 5000.0;
+	p.variance = 6000.0;		// Typically max_altitude minus min_altitude
+	p.variance_fade = 0.53;		// Typically just over 0.5, to conceal the grid ridges
+	p.last_random_pass = 1;
+	p.out_file_name = "W:\\Data\\landscape_01.obj";
+	p.sea_output = SeaOutput::SHOW_LEVEL;
+	
+	// Create it
+	auto gm = GeoMesh::CreateGeoMesh(p);
 
-	GridMesh gm = { 
-		{ 0, 0, 0 ,0 }, 
-		{ 0, 10, 0, 0 },
-		{ 0, 0, 0 ,0 },
-		{ 0, 0, 0 ,0 }
-		};
-
-	SaveAsObjFile(gm, 10, outfile);
-	outfile.close();
-
+	// Save
+	std::ofstream outFile;
+	outFile.open(p.out_file_name);
+	gm->SaveAsObjFile(outFile, p.sea_output);
+	outFile.close();
 }
 

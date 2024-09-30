@@ -4,24 +4,36 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include <boost/program_options.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+#include <filesystem>
 #include <iostream>
+
 
 #include <ZoneTools.h>
 
 using namespace cv;
-using namespace boost::program_options;
 
 int main(int argc, char** argv)
 {
 
     if (argc != 2)
     {
-        std::cout << " Usage: " << argv[0] << " ImageToLoadAndDisplay" << std::endl;
+        std::cout << " Usage: " << argv[0] << " ConfigFile" << std::endl;
         return -1;
     }
+
+    boost::property_tree::ptree configParams;
+    boost::property_tree::ini_parser::read_ini(argv[1], configParams);
+   
+    std::filesystem::path configFilePath(argv[1]);
+    auto configFileFolder = configFilePath.parent_path();
+
+
+    auto image_in = configFileFolder.append(configParams.get<std::string>("files.image_in")).string();
+
     Mat image;
-    image = imread(argv[1], IMREAD_COLOR); // Read the file
+    image = imread(image_in, IMREAD_COLOR); // Read the file
     if (image.empty()) // Check for invalid input
     {
         std::cout << "Could not open or find the image" << std::endl;

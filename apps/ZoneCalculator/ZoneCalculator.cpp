@@ -26,15 +26,16 @@ int main(int argc, char** argv)
     boost::property_tree::ptree configParams;
     boost::property_tree::ini_parser::read_ini(argv[1], configParams);
    
+    // Input and output files
     std::filesystem::path configFilePath(argv[1]);
     auto configFileFolder = configFilePath.parent_path();
-
-
     auto image_in = configFileFolder.append(configParams.get<std::string>("files.image_in")).string();
+    configFileFolder = configFilePath.parent_path();
+    auto image_out = configFileFolder.append(configParams.get<std::string>("files.image_out")).string();
 
     Mat image;
-    image = imread(image_in, IMREAD_COLOR); // Read the file
-    if (image.empty()) // Check for invalid input
+    image = imread(image_in, IMREAD_COLOR); 
+    if (image.empty()) 
     {
         std::cout << "Could not open or find the image" << std::endl;
         return -1;
@@ -49,6 +50,8 @@ int main(int argc, char** argv)
     };
 
     auto image_with_zones = CalcZones(image, width, zone_info);
+
+    imwrite(image_out, image);
     
     namedWindow("Display window", WINDOW_AUTOSIZE); // Create a window for display.
     imshow("Display window", image_with_zones); // Show our image inside it.

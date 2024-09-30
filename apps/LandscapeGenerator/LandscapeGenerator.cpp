@@ -16,7 +16,7 @@ int main()
 	p.variance = 6000.0;		// Typically max_altitude minus min_altitude
 	p.variance_fade = 0.53;		// Typically just over 0.5, to conceal the grid ridges
 	p.last_random_pass = 1;
-	p.out_file_name = "W:\\Data\\landscape_01.obj";
+	p.out_file_name = "\\Output\\LandscapeGenerator\\landscape_01.obj";
 	p.sea_output = SeaOutput::SHOW_LEVEL;
 	
 	// Create it

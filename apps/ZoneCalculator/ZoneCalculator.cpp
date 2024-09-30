@@ -4,11 +4,13 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
+#include <boost/program_options.hpp>
 #include <iostream>
 
 #include <ZoneTools.h>
 
 using namespace cv;
+using namespace boost::program_options;
 
 int main(int argc, char** argv)
 {

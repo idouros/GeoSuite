@@ -27,9 +27,13 @@ std::string getFileParameter(const std::filesystem::path& configFilePath,
 	const boost::property_tree::ptree& configParams,
 	const std::string& key)
 {
-	auto configFileFolder = configFilePath.parent_path();
-	return configFileFolder.append(configParams.get<std::string>(key)).string();
-	// TODO: handle absolute paths (the above only deals with relatives to the config file location)
+	auto fileParameter = configParams.get<std::filesystem::path>(key);
+	if (fileParameter.is_relative()) 
+	{
+		auto configFileFolder = configFilePath.parent_path();
+		return configFileFolder.append(configParams.get<std::string>(key)).string();
+	}
+	return fileParameter.string();
 }
 
 Vec3d PtreeToVec3d(const boost::property_tree::ptree& V)

@@ -6,10 +6,8 @@
 #include <opencv2/highgui.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-#include <filesystem>
+#include <boost/property_tree/json_parser.hpp>
 #include <iostream>
-
-
 #include <ZoneTools.h>
 
 using namespace cv;
@@ -23,40 +21,35 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    boost::property_tree::ptree configParams;
+    ConfigParams configParams;
     boost::property_tree::ini_parser::read_ini(argv[1], configParams);
    
     // Input and output files
     std::filesystem::path configFilePath(argv[1]);
-    auto configFileFolder = configFilePath.parent_path();
-    auto image_in = configFileFolder.append(configParams.get<std::string>("files.image_in")).string();
-    configFileFolder = configFilePath.parent_path();
-    auto image_out = configFileFolder.append(configParams.get<std::string>("files.image_out")).string();
+    auto image_in = getFileParameter(configFilePath, configParams, "files.image_in");
+    auto image_out = getFileParameter(configFilePath, configParams, "files.image_out");
+    auto zone_info_file = getFileParameter(configFilePath, configParams, "files.zone_info");
+
+    // Zone info
+    ZoneInfo zoneInfo;
+    boost::property_tree::json_parser::read_json(zone_info_file, zoneInfo);
 
     Mat image;
     image = imread(image_in, IMREAD_COLOR); 
     if (image.empty()) 
     {
         std::cout << "Could not open or find the image" << std::endl;
-        return -1;
+        return RETURN_CODE::ERR_FILE_NOT_FOUND;
     }
     
-    // TODO: User parameters
-    double width = 100.0;
-    ZoneInfo zone_info = {
-        (Vec3d)image.at<Vec3b>(1, 300),
-        (Vec3d)image.at<Vec3b>(1, 1),
-        (Vec3d)image.at<Vec3b>(1, 600)
-    };
-
-    auto image_with_zones = CalcZones(image, width, zone_info);
+    auto image_with_zones = CalcZones(image, configParams, zoneInfo);
 
     imwrite(image_out, image);
     
-    namedWindow("Display window", WINDOW_AUTOSIZE); // Create a window for display.
-    imshow("Display window", image_with_zones); // Show our image inside it.
-    waitKey(0); // Wait for a keystroke in the window
+    namedWindow("Display window", WINDOW_AUTOSIZE); 
+    imshow("Display window", image_with_zones); 
+    waitKey(0); 
 
-    return 0;
+    return RETURN_CODE::OK;
 }
 

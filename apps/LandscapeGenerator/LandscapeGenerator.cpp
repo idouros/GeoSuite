@@ -3,31 +3,61 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-
+#include <iostream>
+#include <filesystem>
+#include <Helpers.h>
 #include <Mesh.h>
 
-int main()
-{
-	LandscapeParams p;
+LandscapeParams DEFAULT_PARAMS;
 
-	// TODO: read the params from config file
-	p.grid_scale = 100.0;
-	p.grid_rows = 500;
-	p.grid_cols = 500;
-	p.min_altitude = -1000.0;
-	p.max_altitude = 5000.0;
-	p.variance = 6000.0;		// Typically max_altitude minus min_altitude
-	p.variance_fade = 0.53;		// Typically just over 0.5, to conceal the grid ridges
-	p.last_random_pass = 1;
-	p.out_file_name = "\\Output\\LandscapeGenerator\\landscape_01.obj";
-	p.sea_output = SeaOutput::SHOW_LEVEL;
-	
-	// Create it
+int main(int argc, char** argv)
+{
+	if (argc != 2)
+	{
+		std::cout << " Usage: " << argv[0] << " ConfigFile" << std::endl;
+		return -1;
+	}
+
+	// Read the configuration file
+	ConfigParams configParams;
+	boost::property_tree::ini_parser::read_ini(argv[1], configParams);
+
+	// Populate the parameter values
+	LandscapeParams p;
+	p.grid_scale = configParams.get<double>("landscape.grid_scale", DEFAULT_PARAMS.grid_scale);
+	p.grid_rows = configParams.get<size_t>("landscape.grid_rows", DEFAULT_PARAMS.grid_rows);
+	p.grid_cols = configParams.get<size_t>("landscape.grid_cols", DEFAULT_PARAMS.grid_cols);
+	p.min_altitude = configParams.get<double>("landscape.min_altitude", DEFAULT_PARAMS.min_altitude);
+	p.max_altitude = configParams.get<double>("landscape.max_altitude", DEFAULT_PARAMS.max_altitude);
+	p.variance = configParams.get<double>("landscape.variance", DEFAULT_PARAMS.variance);
+	p.variance_fade = configParams.get<double>("landscape.variance_fade", DEFAULT_PARAMS.variance_fade);
+	p.last_random_pass = configParams.get<size_t>("landscape.last_random_pass", DEFAULT_PARAMS.last_random_pass);
+
+	// TODO there must be a cleaner and more generic way to do this
+	auto enum_sea_output = "landscape.sea_output";
+	auto sea_output = configParams.get<std::string>(enum_sea_output, "");
+	try
+	{
+		if (sea_output == "NONE") { p.sea_output = SeaOutput::NONE; }
+		else if (sea_output == "SHOW_LEVEL") { p.sea_output = SeaOutput::SHOW_LEVEL; }
+		else if (sea_output == "CHOP") { p.sea_output = SeaOutput::CHOP; }
+		else if (sea_output == "") { p.sea_output = DEFAULT_PARAMS.sea_output; }
+		else throw std::invalid_argument("Invalid value '" + sea_output + "' for parameter '" + enum_sea_output + "' in config file.");
+	}
+	catch(const std::invalid_argument& e)
+	{
+		std::cout << e.what() << " Exiting." << std::endl;
+		return -1;
+	}
+
+	// Create the landscape
 	auto gm = GeoMesh::CreateGeoMesh(p);
 
 	// Save
+	std::filesystem::path configFilePath(argv[1]);
+	auto out_file_name = getFileParameter(configFilePath, configParams, "files.output_file");
 	std::ofstream outFile;
-	outFile.open(p.out_file_name);
+	outFile.open(out_file_name);
 	gm->SaveAsObjFile(outFile, p.sea_output);
 	outFile.close();
 }

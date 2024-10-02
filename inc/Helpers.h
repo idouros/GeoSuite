@@ -3,6 +3,8 @@
 
 #include <filesystem>
 
+typedef boost::property_tree::ptree ConfigParams;
+
 std::string getFileParameter(const std::filesystem::path& configFilePath,
 	const boost::property_tree::ptree& configParams,
 	const std::string& key)

@@ -13,10 +13,11 @@ enum RETURN_CODE
 };
 
 std::string SEA_ZONE_NAME = "Sea";
+double DEFAULT_WIDTH = 100.0;
+double DEFAULT_COLOUR_EPSILON = 20.0;
 
 using namespace cv;
 
-typedef boost::property_tree::ptree ConfigParams;
 typedef boost::property_tree::ptree ZoneInfo;
 typedef std::vector<Vec3d> Territories;
 typedef std::vector<Vec3d> Waters;
@@ -159,8 +160,8 @@ Mat CalcZones(const cv::Mat& m_in, const ConfigParams& configParams, const ZoneI
 	Waters waters;
 	Vec3d sea_colour;
 	
-	auto width = configParams.get<double>("zones.width");
-	auto colour_epsilon = configParams.get<double>("zones.colour_epsilon");
+	auto width = configParams.get<double>("zones.width", DEFAULT_WIDTH);
+	auto colour_epsilon = configParams.get<double>("zones.colour_epsilon", DEFAULT_COLOUR_EPSILON);
 
 	auto &zones = zone_info.get_child("Zones");
 	size_t i = 0;

@@ -1,6 +1,9 @@
 // LandscapeGenerator.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 #include <Mesh.h>
 
 int main()

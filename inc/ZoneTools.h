@@ -2,8 +2,8 @@
 #define _ZONE_TOOLS
 
 #include <limits>
-#include <filesystem>
 #include <boost/property_tree/ptree.hpp>
+#include <Helpers.h>
 
 enum RETURN_CODE
 {
@@ -23,18 +23,7 @@ typedef std::vector<Vec3d> Waters;
 
 // ----- HELPERS -------------------------------------------------
 
-std::string getFileParameter(const std::filesystem::path& configFilePath,
-	const boost::property_tree::ptree& configParams,
-	const std::string& key)
-{
-	auto fileParameter = configParams.get<std::filesystem::path>(key);
-	if (fileParameter.is_relative()) 
-	{
-		auto configFileFolder = configFilePath.parent_path();
-		return configFileFolder.append(configParams.get<std::string>(key)).string();
-	}
-	return fileParameter.string();
-}
+
 
 Vec3d PtreeToVec3d(const boost::property_tree::ptree& V)
 {

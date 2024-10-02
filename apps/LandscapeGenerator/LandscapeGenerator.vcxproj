@@ -81,8 +81,8 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\int\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\libs\MeshLib\inc</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\libs\MeshLib\inc;$(BOOST_DIR)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\;$(BOOST_DIR)\lib64-msvc-14.3</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -95,8 +95,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\int\$(ProjectName)\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\libs\MeshLib\inc</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;C:\BuildArea\$(SolutionName)\$(Platform)\$(Configuration)\;$(BOOST_DIR)\lib64-msvc-14.3</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\libs\MeshLib\inc;$(BOOST_DIR)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

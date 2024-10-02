@@ -32,23 +32,7 @@ int main(int argc, char** argv)
 	p.variance = configParams.get<double>("landscape.variance", DEFAULT_PARAMS.variance);
 	p.variance_fade = configParams.get<double>("landscape.variance_fade", DEFAULT_PARAMS.variance_fade);
 	p.last_random_pass = configParams.get<size_t>("landscape.last_random_pass", DEFAULT_PARAMS.last_random_pass);
-
-	// TODO there must be a cleaner and more generic way to do this
-	auto enum_sea_output = "landscape.sea_output";
-	auto sea_output = configParams.get<std::string>(enum_sea_output, "");
-	try
-	{
-		if (sea_output == "NONE") { p.sea_output = SeaOutput::NONE; }
-		else if (sea_output == "SHOW_LEVEL") { p.sea_output = SeaOutput::SHOW_LEVEL; }
-		else if (sea_output == "CHOP") { p.sea_output = SeaOutput::CHOP; }
-		else if (sea_output == "") { p.sea_output = DEFAULT_PARAMS.sea_output; }
-		else throw std::invalid_argument("Invalid value '" + sea_output + "' for parameter '" + enum_sea_output + "' in config file.");
-	}
-	catch(const std::invalid_argument& e)
-	{
-		std::cout << e.what() << " Exiting." << std::endl;
-		return -1;
-	}
+	p.sea_output = seaOutputMap[configParams.get<std::string>("landscape.sea_output", "")];
 
 	// Create the landscape
 	auto gm = GeoMesh::CreateGeoMesh(p);

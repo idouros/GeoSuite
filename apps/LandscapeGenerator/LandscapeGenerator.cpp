@@ -5,8 +5,10 @@
 #include <boost/property_tree/ini_parser.hpp>
 #include <iostream>
 #include <filesystem>
+#include <Landscape.h>
 #include <Helpers.h>
 #include <Mesh.h>
+
 
 LandscapeParams DEFAULT_PARAMS;
 

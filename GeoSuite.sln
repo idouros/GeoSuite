@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inc", "inc", "{AC185179-686C-47FF-BFBC-A508AB0CF61A}"
 	ProjectSection(SolutionItems) = preProject
 		inc\Helpers.h = inc\Helpers.h
+		inc\Landscape.h = inc\Landscape.h
 		inc\ZoneTools.h = inc\ZoneTools.h
 	EndProjectSection
 EndProject

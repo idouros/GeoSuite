@@ -45,7 +45,7 @@ void GeoMesh::SaveAsObjFile(std::ofstream& outfile, const SeaOutput sea_output)
 	{
 		auto last_index = rows * cols;
 		// first triangle
-		outfile << "f " << last_index + 1 << " " << last_index + 2 << " " << last_index + 3 << std::endl;
+		outfile << "f " << last_index + 2 << " " << last_index + 1 << " " << last_index + 3 << std::endl;
 		// second triangle
 		outfile << "f " << last_index + 3 << " " << last_index + 4 << " " << last_index + 2 << std::endl;
 	}

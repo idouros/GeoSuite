@@ -12,25 +12,7 @@
 
 LandscapeParams DEFAULT_PARAMS;
 
-// TODO - move this somewhere else
-template<typename T>
-T ReadEnumFromConfigParams(const ConfigParams& configParams,
-	const std::map<std::string, T>& enum_map,
-	const std::string& key,
-	const std::string& defaultValue)
-{
-	auto stringFromConfig = configParams.get<std::string>(key, defaultValue);
-	auto it = enum_map.find(stringFromConfig);
-	if (it != enum_map.end())
-	{
-		return seaOutputMap[stringFromConfig];
-	}
-	else
-	{
-		std::cout << "Invalid value '" + stringFromConfig + "' for key '" + + "' found in config file. Exiting" << std::endl;
-		exit(-1);
-	}
-}
+
 
 
 int main(int argc, char** argv)

@@ -12,6 +12,29 @@
 
 LandscapeParams DEFAULT_PARAMS;
 
+// TODO - move this somewhere else, and/or template it
+SeaOutput ReadEnumFromConfigParams(const ConfigParams& configParams,
+	const std::map<std::string, SeaOutput>& enum_map,
+	const std::string& key,
+	const std::string& defaultValue)
+{
+	auto stringFromConfig = configParams.get<std::string>(key, defaultValue);
+	auto it = enum_map.find(stringFromConfig);
+	if (it != enum_map.end())
+	{
+		return seaOutputMap[stringFromConfig];
+	}
+	else
+	{
+		std::cout << "Invalid value '" + stringFromConfig + "' for key '" + +"' found in config file. Exiting" << std::endl;
+		exit(-1);
+	}
+}
+
+
+
+
+
 int main(int argc, char** argv)
 {
 	if (argc != 2)
@@ -34,7 +57,7 @@ int main(int argc, char** argv)
 	p.variance = configParams.get<double>("landscape.variance", DEFAULT_PARAMS.variance);
 	p.variance_fade = configParams.get<double>("landscape.variance_fade", DEFAULT_PARAMS.variance_fade);
 	p.last_random_pass = configParams.get<size_t>("landscape.last_random_pass", DEFAULT_PARAMS.last_random_pass);
-	p.sea_output = seaOutputMap[configParams.get<std::string>("landscape.sea_output", "")];
+	p.sea_output = ReadEnumFromConfigParams(configParams, seaOutputMap, "landscape.sea_output", "SHOW_LEVEL");
 
 	// Create the landscape
 	auto gm = GeoMesh::CreateGeoMesh(p);

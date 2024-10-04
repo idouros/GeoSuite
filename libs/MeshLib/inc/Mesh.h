@@ -10,7 +10,6 @@ typedef std::vector<std::vector<double>> GridMesh;
 typedef std::vector<std::vector<bool>> FlagMesh;
 
 
-
 struct LandscapeParams {
 	size_t grid_rows = 500;
 	size_t grid_cols = 500;
@@ -22,8 +21,6 @@ struct LandscapeParams {
 	size_t last_random_pass = 1;
 	SeaOutput sea_output = SeaOutput::SHOW_LEVEL;
 } ;
-
-
 
 class GeoMesh
 {

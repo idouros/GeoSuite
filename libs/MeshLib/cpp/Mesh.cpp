@@ -55,13 +55,18 @@ GeoMesh::GeoMesh(const LandscapeParams& parameters)
 {
 	this->params = parameters;
 
-	auto rows = this->params.grid_rows;
-	auto cols = this->params.grid_cols;
+	auto rows = this->params.grid_rows + this->params.smoothing_radius;
+	auto cols = this->params.grid_cols + this->params.smoothing_radius;
 
 	this->altitudes.resize(rows, std::vector<double>(cols, 0.0));
 	this->setFlags.resize(rows, std::vector<bool>(cols, false));
 
 	this->FillRegion(0, 0, rows - 1, cols - 1, parameters.variance, 0);
+
+	if (parameters.smoothing_radius > 0)
+	{
+		this->GaussianSmoothing(parameters.smoothing_radius);
+	}
 }
 
 double GeoMesh::RandomAltitude(std::uniform_real_distribution<double>& distribution_1, std::normal_distribution<double>& distribution_2)
@@ -163,8 +168,80 @@ void GeoMesh::FillRegion(const size_t& start_row, const size_t& start_col, const
 	}
 }
 
+void GeoMesh::GaussianSmoothing(const size_t& radius)
+{
+	auto kernel = CreateGaussianKernel(radius);
+	auto smoothLandscape = Conv2D(this->altitudes, *kernel);
+	this->altitudes = *smoothLandscape;
+}
+
 std::shared_ptr<GeoMesh> GeoMesh::CreateGeoMesh(const LandscapeParams& parameters)
 {
 	auto gm = GeoMesh(parameters);
 	return std::make_shared<GeoMesh>(gm);
+}
+
+std::shared_ptr<GridMesh> CreateGaussianKernel(const size_t& radius)
+{
+	auto kernel = GridMesh();
+	auto kernelSize = 2 * radius + 1;
+	kernel.resize(kernelSize, std::vector<double>(kernelSize, 1.0));
+
+	double sigma = radius / 3.0;
+	double denom = 2.0 * sigma * sigma;
+
+	double sum = 0.0;
+	for (size_t i = 0; i < kernelSize; i++)
+	{
+		double dx = (double)(i) - (double)(radius);
+		double xx = dx * dx / denom;
+		for (size_t j = 0; j < kernelSize; j++)
+		{
+			
+			double dy = (double)(j) - (double)(radius);
+			double yy = dy * dy / denom;
+			kernel[i][j] = std::exp(-(xx + yy));
+			sum += kernel[i][j];
+		}
+	}
+
+	// Normalization (elements need to add up to 1)
+	for (size_t i = 0; i < kernelSize; i++)
+	{
+		for (size_t j = 0; j < kernelSize; j++)
+		{
+			kernel[i][j] /= sum;
+		}
+	}
+
+	return std::make_shared<GridMesh>(kernel);
+}
+
+std::shared_ptr<GridMesh> Conv2D(const GridMesh& altitudes, const GridMesh& kernel)
+{
+	auto n = kernel.size();
+	auto radius = n / 2;
+	auto rows = altitudes.size() - 2 * radius; 
+	auto cols = altitudes[0].size() - 2 * radius;
+
+	auto result = GridMesh();
+	result.resize(rows, std::vector<double>(cols, 0.0));
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			auto sum = 0.0;
+			for (int ii = 0; ii < n; ii++)
+			{
+				for (int jj = 0; jj < n; jj++)
+				{
+					sum += altitudes[i+ii][j+jj] * kernel[ii][jj];
+				}
+			}
+			result[i][j] = sum;
+		}
+	}
+
+	return std::make_shared<GridMesh>(result);
 }

@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 	p.variance_fade = configParams.get<double>("landscape.variance_fade", DEFAULT_PARAMS.variance_fade);
 	p.last_random_pass = configParams.get<size_t>("landscape.last_random_pass", DEFAULT_PARAMS.last_random_pass);
 	p.sea_output = ReadEnumFromConfigParams(configParams, seaOutputMap, "landscape.sea_output", "SHOW_LEVEL");
+	p.smoothing_radius = configParams.get<size_t>("landscape.smoothing_radius", DEFAULT_PARAMS.smoothing_radius);
 
 	// Create the landscape
 	auto gm = GeoMesh::CreateGeoMesh(p);

@@ -20,7 +20,13 @@ struct LandscapeParams {
 	double variance_fade = 0.53;	// Typically just over 0.5, to conceal the grid ridges
 	size_t last_random_pass = 1;
 	SeaOutput sea_output = SeaOutput::SHOW_LEVEL;
+	size_t smoothing_radius = 0;
 } ;
+
+
+std::shared_ptr<GridMesh> CreateGaussianKernel(const size_t& radius);
+std::shared_ptr<GridMesh> Conv2D(const GridMesh& altitudes, const GridMesh& kernel);
+
 
 class GeoMesh
 {
@@ -43,6 +49,9 @@ private:
 
 	// "Diamond-square algorithm" - Fournier, Fussell and Carpenter at SIGGRAPH 1982.
 	void FillRegion(const size_t& start_row, const size_t& start_col, const size_t& end_row, const size_t& end_col, const double& variance, const size_t& pass);
+
+	// Plain old convolution with a Gaussian kernel
+	void GaussianSmoothing(const size_t& radius);
 
 	GridMesh altitudes;
 	FlagMesh setFlags;

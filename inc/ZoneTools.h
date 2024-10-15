@@ -147,7 +147,7 @@ size_t FindZone(const cv::Mat& m, const int& row, const int& col, const double& 
 }
 
 
-Mat CalcZones(const cv::Mat& m_in, const ConfigParams& configParams, const ZoneInfo& zone_info) 
+void CalcZones(const cv::Mat& m_in, const ConfigParams& configParams, const ZoneInfo& zone_info) 
 { 
 	Mat m;
 	m_in.convertTo(m, CV_64F);
@@ -207,8 +207,6 @@ Mat CalcZones(const cv::Mat& m_in, const ConfigParams& configParams, const ZoneI
 			}
 		}
 	}
-
-	return m_out; 
 }
 
 #endif

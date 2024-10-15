@@ -44,10 +44,11 @@ int main(int argc, char** argv)
     }
     
     cv::Mat image_with_zones;
+    image.copyTo(image_with_zones);
     LOG_OUT("Calculating Zones...");
-    EXEC_TIMED(image_with_zones = CalcZones(image, configParams, zoneInfo));
+    EXEC_TIMED(CalcZones(image_with_zones, configParams, zoneInfo));
 
-    imwrite(image_out, image);
+    imwrite(image_out, image_with_zones);
     
     namedWindow("Display window", WINDOW_AUTOSIZE); 
     imshow("Display window", image_with_zones); 

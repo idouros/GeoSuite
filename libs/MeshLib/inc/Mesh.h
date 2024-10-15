@@ -32,9 +32,13 @@ class GeoMesh
 {
 public:
 	void SaveAsObjFile(std::ofstream& outfile, const SeaOutput sea_output = SeaOutput::NONE);
+	GeoMesh() {};
 
 	// Factory
 	static std::shared_ptr<GeoMesh> CreateGeoMesh(const LandscapeParams& parameters);
+
+	// Plain old convolution with a Gaussian kernel
+	void GaussianSmoothing(const size_t& radius);
 
 private:
 	GeoMesh(const LandscapeParams& parameters);
@@ -49,9 +53,6 @@ private:
 
 	// "Diamond-square algorithm" - Fournier, Fussell and Carpenter at SIGGRAPH 1982.
 	void FillRegion(const size_t& start_row, const size_t& start_col, const size_t& end_row, const size_t& end_col, const double& variance, const size_t& pass);
-
-	// Plain old convolution with a Gaussian kernel
-	void GaussianSmoothing(const size_t& radius);
 
 	GridMesh altitudes;
 	FlagMesh setFlags;

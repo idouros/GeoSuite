@@ -32,6 +32,7 @@ int main(int argc, char** argv)
 
     // Zone info
     ZoneInfo zoneInfo;
+    LOG_OUT("Reading config file...");
     boost::property_tree::json_parser::read_json(zone_info_file, zoneInfo);
 
     Mat image;
@@ -42,7 +43,9 @@ int main(int argc, char** argv)
         return RETURN_CODE::ERR_FILE_NOT_FOUND;
     }
     
-    auto image_with_zones = CalcZones(image, configParams, zoneInfo);
+    cv::Mat image_with_zones;
+    LOG_OUT("Calculating Zones...");
+    EXEC_TIMED(image_with_zones = CalcZones(image, configParams, zoneInfo));
 
     imwrite(image_out, image);
     

@@ -9,11 +9,7 @@
 #include <Helpers.h>
 #include <Mesh.h>
 
-
 LandscapeParams DEFAULT_PARAMS;
-
-
-
 
 int main(int argc, char** argv)
 {
@@ -24,6 +20,7 @@ int main(int argc, char** argv)
 	}
 
 	// Read the configuration file
+	LOG_OUT("Reading config file...");
 	ConfigParams configParams;
 	boost::property_tree::ini_parser::read_ini(argv[1], configParams);
 
@@ -41,14 +38,23 @@ int main(int argc, char** argv)
 	p.smoothing_radius = configParams.get<size_t>("landscape.smoothing_radius", DEFAULT_PARAMS.smoothing_radius);
 
 	// Create the landscape
-	auto gm = GeoMesh::CreateGeoMesh(p);
+	auto gm = std::make_shared<GeoMesh>(GeoMesh());
+	LOG_OUT(std::format("Creating landscape mesh grid with {} rows and {} columns...", p.grid_rows, p.grid_cols));
+	EXEC_TIMED(gm = GeoMesh::CreateGeoMesh(p));
+
+	if (p.smoothing_radius > 0)
+	{
+		LOG_OUT("Smoothing...")
+		EXEC_TIMED(gm->GaussianSmoothing(p.smoothing_radius);)
+	}
 
 	// Save
 	std::filesystem::path configFilePath(argv[1]);
 	auto out_file_name = getFileParameter(configFilePath, configParams, "files.output_file");
+	LOG_OUT(std::format("Saving landscape to: {}", out_file_name));
 	std::ofstream outFile;
 	outFile.open(out_file_name);
-	gm->SaveAsObjFile(outFile, p.sea_output);
+	EXEC_TIMED(gm->SaveAsObjFile(outFile, p.sea_output));
 	outFile.close();
 }
 
